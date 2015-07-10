@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #div{
+            width: 100px;
+            height: 100px;
+            background-color: pink;
+            margin-top: 500px;;
+        }
+    </style>
+</head>
+<body>
+<div id="div"></div>
+<script src="../../js/EventUtil.js"></script>
+<script>
+    var oDiv = document.getElementById('div');
+
+    /* get page position when the element by click */
+    var getPagePosition = function(e){
+         /** <= IE8 ,  use document.body get element position;
+          *   click element position X :  clientX + scroll position;
+          *   click element position Y : clientY + scroll.position;
+          *
+          *    document.body : 混杂模式
+          *    document.documentElement : 标准模式
+          * */
+         var event = EventUtil.getEvent(e);
+         var pageX = event.pageX;
+         var pageY = event.pageY;
+
+         if(pageX === undefined){
+             pageX = event.clientX + (document.body.scrollLeft || document.documentElement.scrollLeft);
+         };
+         if(pageY === undefined){
+             pageY = event.clientY + (document.body.scrollTop || document.documentElement.scrollTop);
+         };
+
+         console.info(pageX + " : " + pageY);
+         return pageX + ":" + pageY;
+    };
+
+    /** get screen position when the element by click*/
+
+    var getScreenPosition = function(e){
+        var event = EventUtil.getEvent(e);
+
+        var screenX = event.screenX
+        var screenY = event.screenY;
+
+        console.info(screenX + " : " + screenY);
+    };
+
+    EventUtil.addHandler(oDiv,'click',getPagePosition);
+    EventUtil.addHandler(document,'click',getScreenPosition);
+
+</script>
+</body>
+</html>

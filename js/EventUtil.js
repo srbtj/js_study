@@ -44,7 +44,7 @@ var EventUtil = {
      */
     getEvent:function(event){
        // return event || window.event;
-        return event ? event : window.event;
+        return event !== undefined ? event : window.event;
     },
     /**
      *  获得事件的目标;
@@ -74,6 +74,31 @@ var EventUtil = {
             event.stopPropagation()
         }else{
             event.cancelBubble = true;
+        }
+    },
+    /**
+     *  获得相关元素的方法
+     * @param event
+     */
+    getRelatedTarget:function(event){
+        if(event.relatedTarget){
+            return event.relatedTarget;
+        }else if(event.toElement){
+            return event.toElement;
+        }else if(event.fromElement){
+            return event.fromElement;
+        }else{
+            return null;
+        }
+    },
+    getWheelDelta:function(event){
+        if(event.wheelDelta){
+            return (client.engine.opera && client.engine.opera < 9.5 ? -event.wheelDelta : event.wheelDelta);
+        }else{
+            /**   Firefox 支持 DOMMouseScroll的类似事件 ，在鼠标滚轮时触发；
+             *   鼠标的滚轮信息保存在 ： detail属性中，当向前滚动鼠标时， 属性值为 -3的倍数;
+             * */
+            return -event.detail * 40;   /* 处理 Firefox */
         }
     }
 
